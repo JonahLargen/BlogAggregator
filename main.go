@@ -1,8 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/JonahLargen/BlobAggregator/internal/config"
 )
@@ -13,16 +13,29 @@ func main() {
 		fmt.Printf("Error reading config: %v\n", err)
 		return
 	}
-	cfg.SetUser("JonahLargen")
-	cfg, err = config.ReadConfig()
-	if err != nil {
-		fmt.Printf("Error reading config after setting user: %v\n", err)
-		return
+
+	state := config.State{
+		Config: cfg,
 	}
-	jsonBytes, err := json.MarshalIndent(cfg, "", "  ")
-	if err != nil {
-		fmt.Println("Error marshalling config:", err)
-		return
+
+	commands := config.NewCommands()
+	args := os.Args
+
+	if len(args) < 2 {
+		fmt.Fprintln(os.Stderr, "Not enough arguments provided. Usage: <command> [args]")
+		os.Exit(1)
 	}
-	fmt.Println(string(jsonBytes))
+
+	commandName := args[1]
+	commandArgs := args[2:]
+
+	err = commands.Run(&state, config.Command{
+		Name: commandName,
+		Args: commandArgs,
+	})
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error executing command '%s': %v\n", commandName, err)
+		os.Exit(1)
+	}
 }
