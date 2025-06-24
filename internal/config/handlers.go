@@ -57,3 +57,33 @@ func handlerRegister(s *State, cmd Command) error {
 	fmt.Printf("Registered user %s\n", resp.Name)
 	return nil
 }
+
+func handlerReset(s *State, cmd Command) error {
+	err := s.DB.Reset(context.Background())
+	if err != nil {
+		return fmt.Errorf("error resetting database: %w", err)
+	}
+	fmt.Printf("Database reset successfully\n")
+	return nil
+}
+
+func handlerListUsers(s *State, cmd Command) error {
+	users, err := s.DB.ListUsers(context.Background())
+	if err != nil {
+		return fmt.Errorf("error listing users: %w", err)
+	}
+	if len(users) == 0 {
+		fmt.Println("No users found")
+		return nil
+	}
+	fmt.Println("Users:")
+	currentUserName := s.Config.CurrentUserName
+	for _, user := range users {
+		if user.Name == currentUserName {
+			fmt.Printf("* %s (current)\n", user.Name)
+		} else {
+			fmt.Printf("* %s\n", user.Name)
+		}
+	}
+	return nil
+}

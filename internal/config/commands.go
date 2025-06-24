@@ -10,6 +10,8 @@ func NewCommands() *commands {
 	c := &commands{}
 	c.register("login", handlerLogin)
 	c.register("register", handlerRegister)
+	c.register("reset", handlerReset)
+	c.register("users", handlerListUsers)
 	return c
 }
 
