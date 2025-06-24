@@ -17,7 +17,7 @@ func handlerLogin(s *State, cmd Command) error {
 	userName := cmd.Args[0]
 	resp, err := s.DB.GetUserByName(context.Background(), userName)
 	if err == sql.ErrNoRows || resp.ID == uuid.Nil {
-		return fmt.Errorf("User %s does not exist. Please register.", userName)
+		return fmt.Errorf("user %s does not exist, please register", userName)
 	}
 	if err != nil {
 		return fmt.Errorf("error fetching user: %w", err)
@@ -39,7 +39,7 @@ func handlerRegister(s *State, cmd Command) error {
 		return fmt.Errorf("error checking if user exists: %w", err)
 	}
 	if resp.ID != uuid.Nil {
-		return fmt.Errorf("User %s already exists. Please log in instead.", name)
+		return fmt.Errorf("user %s already exists, please log in instead", name)
 	}
 	now := time.Now()
 	resp, err = s.DB.CreateUser(context.Background(), database.CreateUserParams{
