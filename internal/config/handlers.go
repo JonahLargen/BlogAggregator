@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/JonahLargen/BlobAggregator/internal/database"
+	"github.com/JonahLargen/BlobAggregator/internal/rss"
 	"github.com/google/uuid"
 )
 
@@ -85,5 +86,19 @@ func handlerListUsers(s *State, cmd Command) error {
 			fmt.Printf("* %s\n", user.Name)
 		}
 	}
+	return nil
+}
+
+func handlerAgg(s *State, cmd Command) error {
+	// if len(cmd.Args) == 0 {
+	// 	return fmt.Errorf("agg command requires a feed URL argument")
+	// }
+	// feedURL := cmd.Args[0]
+	feedURL := "https://www.wagslane.dev/index.xml"
+	fetchFeed, err := rss.FetchFeed(context.Background(), feedURL)
+	if err != nil {
+		return fmt.Errorf("error fetching feed %s: %w", feedURL, err)
+	}
+	fmt.Printf("%+v\n", fetchFeed)
 	return nil
 }

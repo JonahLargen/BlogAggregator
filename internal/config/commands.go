@@ -12,6 +12,7 @@ func NewCommands() *commands {
 	c.register("register", handlerRegister)
 	c.register("reset", handlerReset)
 	c.register("users", handlerListUsers)
+	c.register("agg", handlerAgg)
 	return c
 }
 
