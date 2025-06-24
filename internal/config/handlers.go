@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/JonahLargen/BlobAggregator/internal/database"
@@ -18,8 +17,7 @@ func handlerLogin(s *State, cmd Command) error {
 	userName := cmd.Args[0]
 	resp, err := s.DB.GetUserByName(context.Background(), userName)
 	if err == sql.ErrNoRows || resp.ID == uuid.Nil {
-		fmt.Printf("User %s does not exist. Please register.\n", userName)
-		os.Exit(1)
+		return fmt.Errorf("User %s does not exist. Please register.", userName)
 	}
 	if err != nil {
 		return fmt.Errorf("error fetching user: %w", err)
@@ -41,8 +39,7 @@ func handlerRegister(s *State, cmd Command) error {
 		return fmt.Errorf("error checking if user exists: %w", err)
 	}
 	if resp.ID != uuid.Nil {
-		fmt.Printf("User %s already exists. Please log in instead.\n", name)
-		os.Exit(1)
+		return fmt.Errorf("User %s already exists. Please log in instead.", name)
 	}
 	now := time.Now()
 	resp, err = s.DB.CreateUser(context.Background(), database.CreateUserParams{
