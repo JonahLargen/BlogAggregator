@@ -16,9 +16,6 @@ WHERE id = $1;
 SELECT * FROM users
 WHERE name = $1;
 
--- name: Reset :exec
-TRUNCATE TABLE users;
-
 -- name: ListUsers :many
 SELECT * FROM users
 ORDER BY name ASC;

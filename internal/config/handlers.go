@@ -60,7 +60,7 @@ func handlerRegister(s *State, cmd Command) error {
 }
 
 func handlerReset(s *State, cmd Command) error {
-	err := s.DB.Reset(context.Background())
+	err := s.DB.ResetAll(context.Background())
 	if err != nil {
 		return fmt.Errorf("error resetting database: %w", err)
 	}
@@ -90,15 +90,58 @@ func handlerListUsers(s *State, cmd Command) error {
 }
 
 func handlerAgg(s *State, cmd Command) error {
-	// if len(cmd.Args) == 0 {
-	// 	return fmt.Errorf("agg command requires a feed URL argument")
-	// }
-	// feedURL := cmd.Args[0]
-	feedURL := "https://www.wagslane.dev/index.xml"
+	if len(cmd.Args) == 0 {
+		return fmt.Errorf("agg command requires a feed URL argument")
+	}
+	feedURL := cmd.Args[0]
+	//feedURL := "https://www.wagslane.dev/index.xml"
 	fetchFeed, err := rss.FetchFeed(context.Background(), feedURL)
 	if err != nil {
 		return fmt.Errorf("error fetching feed %s: %w", feedURL, err)
 	}
 	fmt.Printf("%+v\n", fetchFeed)
+	return nil
+}
+
+func addFeed(s *State, cmd Command) error {
+	if len(cmd.Args) < 2 {
+		return fmt.Errorf("add feed command requires a feed name and feed URL argument")
+	}
+	feedName := cmd.Args[0]
+	feedURL := cmd.Args[1]
+	user, err := s.DB.GetUserByName(context.Background(), s.Config.CurrentUserName)
+	if err != nil {
+		return fmt.Errorf("error fetching user: %w", err)
+	}
+	feed, err := s.DB.CreateFeed(context.Background(), database.CreateFeedParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		Name:      feedName,
+		Url:       feedURL,
+		UserID:    user.ID,
+	})
+	if err != nil {
+		return fmt.Errorf("error adding feed %s: %w", feedURL, err)
+	}
+	fmt.Printf("Added feed %s\n", feed.Url)
+	return nil
+}
+
+func feeds(s *State, _ Command) error {
+	feeds, err := s.DB.ListFeeds(context.Background())
+	if err != nil {
+		return fmt.Errorf("error listing feeds: %w", err)
+	}
+	for _, feed := range feeds {
+		fmt.Printf("Name: %s | URL: %s | User ID: %s\n",
+			feed.Name,
+			feed.Url,
+			feed.UserName,
+		)
+	}
+	if len(feeds) == 0 {
+		fmt.Println("No feeds found")
+	}
 	return nil
 }

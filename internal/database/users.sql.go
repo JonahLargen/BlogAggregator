@@ -113,12 +113,3 @@ func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
 	}
 	return items, nil
 }
-
-const reset = `-- name: Reset :exec
-TRUNCATE TABLE users
-`
-
-func (q *Queries) Reset(ctx context.Context) error {
-	_, err := q.db.ExecContext(ctx, reset)
-	return err
-}
