@@ -11,6 +11,13 @@ VALUES (
 RETURNING *;
 
 -- name: ListFeeds :many
-SELECT f.*, u.name as "user_name" FROM feeds f
+SELECT f.*, u.name as "user_name" 
+FROM feeds f
 join users u on f.user_id = u.id
 ORDER BY f.created_at DESC;
+
+-- name: GetFeedByUrl :one
+SELECT f.*
+FROM feeds f
+WHERE f.url = $1
+LIMIT 1;
