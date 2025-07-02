@@ -103,16 +103,12 @@ func handlerAgg(s *State, cmd Command) error {
 	return nil
 }
 
-func handlerAddFeed(s *State, cmd Command) error {
+func handlerAddFeed(s *State, cmd Command, user database.User) error {
 	if len(cmd.Args) < 2 {
 		return fmt.Errorf("add feed command requires a feed name and feed URL argument")
 	}
 	feedName := cmd.Args[0]
 	feedURL := cmd.Args[1]
-	user, err := s.DB.GetUserByName(context.Background(), s.Config.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("error fetching user: %w", err)
-	}
 	feed, err := s.DB.GetFeedByUrl(context.Background(), feedURL)
 	if err != nil && err != sql.ErrNoRows {
 		return fmt.Errorf("error checking if feed exists: %w", err)
@@ -163,7 +159,7 @@ func handlerFeeds(s *State, _ Command) error {
 	return nil
 }
 
-func handlerFollow(s *State, cmd Command) error {
+func handlerFollow(s *State, cmd Command, user database.User) error {
 	if len(cmd.Args) < 1 {
 		return fmt.Errorf("follow command requires a url argument")
 	}
@@ -171,10 +167,6 @@ func handlerFollow(s *State, cmd Command) error {
 	feed, err := s.DB.GetFeedByUrl(context.Background(), feedURL)
 	if err != nil {
 		return fmt.Errorf("feed %s not found", feedURL)
-	}
-	user, err := s.DB.GetUserByName(context.Background(), s.Config.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("error fetching user: %w", err)
 	}
 	_, err = s.DB.CreateFeedFollow(context.Background(), database.CreateFeedFollowParams{
 		ID:        uuid.New(),
@@ -190,11 +182,7 @@ func handlerFollow(s *State, cmd Command) error {
 	return nil
 }
 
-func handlerFollowing(s *State, _ Command) error {
-	user, err := s.DB.GetUserByName(context.Background(), s.Config.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("error fetching user: %w", err)
-	}
+func handlerFollowing(s *State, _ Command, user database.User) error {
 	following, err := s.DB.GetFeedFollowsForUser(context.Background(), user.ID)
 	if err != nil {
 		return fmt.Errorf("error fetching following feeds: %w", err)
