@@ -12,7 +12,7 @@ Long Running, Persistent RSS Blog Aggregator
 You can install the `gator` CLI by running:
 
 ```bash
-go install github.com/JonahLargen/BlogAggregator@latest
+go install github.com/JonahLargen/BlogAggregator/cmd/gator@latest
 ```
 
 This will place the compiled binary in your `$GOPATH/bin` or `$HOME/go/bin` directory. Make sure this path is in your `$PATH`.
