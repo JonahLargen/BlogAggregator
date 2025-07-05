@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/JonahLargen/BlobAggregator/internal/config"
-	"github.com/JonahLargen/BlobAggregator/internal/database"
+	"github.com/JonahLargen/BlogAggregator/internal/config"
+	"github.com/JonahLargen/BlogAggregator/internal/database"
 	_ "github.com/lib/pq"
 )
 

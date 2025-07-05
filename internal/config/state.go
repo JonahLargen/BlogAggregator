@@ -1,6 +1,6 @@
 package config
 
-import "github.com/JonahLargen/BlobAggregator/internal/database"
+import "github.com/JonahLargen/BlogAggregator/internal/database"
 
 type State struct {
 	Config *Config

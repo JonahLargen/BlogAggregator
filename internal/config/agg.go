@@ -8,8 +8,8 @@ import (
 
 	"database/sql"
 
-	"github.com/JonahLargen/BlobAggregator/internal/database"
-	"github.com/JonahLargen/BlobAggregator/internal/rss"
+	"github.com/JonahLargen/BlogAggregator/internal/database"
+	"github.com/JonahLargen/BlogAggregator/internal/rss"
 	"github.com/google/uuid"
 	"github.com/lib/pq"
 )
