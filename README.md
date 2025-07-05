@@ -1,6 +1,6 @@
 # BlogAggregator
 
-Long Running, Persistent RSS Blog Aggregator
+Long Running, Persistent RSS Blog Aggregator (aka gator)
 
 ## Requirements
 
