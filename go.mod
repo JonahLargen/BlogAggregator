@@ -1,4 +1,4 @@
-module github.com/JonahLargen/BlobAggregator
+module github.com/JonahLargen/BlogAggregator
 
 go 1.24.4
 
