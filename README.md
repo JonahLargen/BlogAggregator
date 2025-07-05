@@ -36,16 +36,16 @@ Replace the `db_url` with your own Postgres connection string.
 
 ## Running the program
 
+**For production and normal usage, always use the `gator` binary:**
+
+```bash
+gator <command> [args]
+```
+
 For development purposes, you can use:
 
 ```bash
 go run .
-```
-
-However, **for production and normal usage, always use the `gator` binary:**
-
-```bash
-gator <command> [args]
 ```
 
 ## Available Commands
@@ -58,9 +58,9 @@ Here are some of the commands you can run with the `gator` CLI:
   Log in as an existing user.
 - `reset`  
   Reset the database (dangerous, wipes data!).
-- `users`  
+- `users`
   List all users.
-- `agg <seconds_between_requests>`  
+- `agg <time_between_requests>`  
   Start aggregating feeds.
 - `addfeed <name> <url>`  
   Add a new RSS feed.
@@ -77,26 +77,25 @@ Here are some of the commands you can run with the `gator` CLI:
 
 ### Example usage
 
-Register and log in:
+Register (automatically logs you in):
 
 ```bash
 gator register alice
 ```
 
-Add a feed and follow it:
+Add a feed (you automatically follow any feed you add):
 
 ```bash
 gator addfeed "MyBlog" "https://myblog.com/rss"
-gator follow "https://myblog.com/rss"
 ```
 
 Aggregate feeds every 60 seconds:
 
 ```bash
-gator agg 60
+gator agg 60s
 ```
 
-Browse your posts:
+Browse your most recent posts:
 
 ```bash
 gator browse 10
