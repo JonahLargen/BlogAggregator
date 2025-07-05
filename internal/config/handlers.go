@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/JonahLargen/BlobAggregator/internal/database"
-	"github.com/JonahLargen/BlobAggregator/internal/rss"
 	"github.com/google/uuid"
 )
 
@@ -91,15 +90,14 @@ func handlerListUsers(s *State, cmd Command) error {
 }
 
 func handlerAgg(s *State, cmd Command) error {
-	if len(cmd.Args) == 0 {
-		return fmt.Errorf("agg command requires a feed URL argument")
+	if len(cmd.Args) < 1 {
+		return fmt.Errorf("scrape feeds command requires a time between requests argument")
 	}
-	feedURL := cmd.Args[0]
-	fetchFeed, err := rss.FetchFeed(context.Background(), feedURL)
+	time_between_reqs := cmd.Args[0]
+	err := agg(s, time_between_reqs)
 	if err != nil {
-		return fmt.Errorf("error fetching feed %s: %w", feedURL, err)
+		return fmt.Errorf("error starting feed aggregation: %w", err)
 	}
-	fmt.Printf("%+v\n", fetchFeed)
 	return nil
 }
 
