@@ -58,7 +58,7 @@ Here are some of the commands you can run with the `gator` CLI:
   Log in as an existing user.
 - `reset`  
   Reset the database (dangerous, wipes data!).
-- `users`
+- `users`  
   List all users.
 - `agg <time_between_requests>`  
   Start aggregating feeds.
